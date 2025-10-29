@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PokemonApiResponse {
+    @JsonProperty("flavor_text_entries")
     private List<FlavorTextEntry> flavorTextEntries;
     private Habitat habitat;
     private String name;

@@ -9,5 +9,5 @@ import org.springframework.web.service.annotation.HttpExchange;
 public interface PokemonClient {
 
     @GetExchange("/pokemon-species/{name}")
-    PokemonApiResponse getPokemonByName(@PathVariable String name);
+    PokemonApiResponse getPokemonByName(@PathVariable("name") String name);
 }

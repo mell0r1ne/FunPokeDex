@@ -16,12 +16,12 @@ public class PokemonController {
     private final PokemonService pokemonService;
 
     @GetMapping("/{name}")
-    public ResponseEntity<PokemonResponse> getPokemon(@PathVariable String name) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<PokemonResponse> getPokemon(@PathVariable("name") String name) {
+        return ResponseEntity.ok(pokemonService.getPokemonInfo(name));
     }
 
     @GetMapping("/translated/{name}")
-    public ResponseEntity<PokemonResponse> getTranslatedPokemon(@PathVariable String name) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<PokemonResponse> getTranslatedPokemon(@PathVariable("name") String name) {
+        return ResponseEntity.ok(pokemonService.getTranslatedPokemonInfo(name));
     }
 }

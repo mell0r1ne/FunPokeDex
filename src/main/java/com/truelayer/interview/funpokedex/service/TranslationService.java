@@ -17,7 +17,7 @@ public class TranslationService {
                 : "shakespeare";
 
         String translatedText = translationClient.getTranslation(authorName, pokemon.getDescription())
-                .getContent()
+                .getContents()
                 .getTranslated();
 
         return PokemonResponse.builder()
