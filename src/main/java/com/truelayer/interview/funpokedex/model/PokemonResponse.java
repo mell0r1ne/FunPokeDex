@@ -10,4 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PokemonResponse {
+    private String name;
+    private String description;
+    private String habitat;
+    private boolean isLegendary;
 }
