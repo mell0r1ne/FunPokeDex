@@ -1,4 +1,4 @@
-package com.truelayer.interview.funpokedex.model;
+package com.truelayer.interview.funpokedex.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

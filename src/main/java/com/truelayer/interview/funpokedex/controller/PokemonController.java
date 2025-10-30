@@ -1,6 +1,6 @@
 package com.truelayer.interview.funpokedex.controller;
 
-import com.truelayer.interview.funpokedex.model.PokemonResponse;
+import com.truelayer.interview.funpokedex.model.dto.PokemonResponse;
 import com.truelayer.interview.funpokedex.service.PokemonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
