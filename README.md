@@ -28,52 +28,75 @@ sudo systemctl start docker
 ```
 
 Verify Docker works:
-```
+```bash
 docker --version
 ```
+
+---
+
 ## 🛠️ Build and Run with Docker
-##### 1. Clone this repository
-```
+
+#### 1. Clone this repository
+```bash
 git clone https://github.com/your-username/funpokedex.git
 cd funpokedex
 ```
 
+> 💡 **Note:**  
+> If you don’t have `git` installed, install it with:
+>
+> **Windows:** [Download Git for Windows](https://git-scm.com/download/win)  
+> **macOS:** Run `brew install git` (requires Homebrew)  
+> **Ubuntu / Debian:**
+> ```bash
+> sudo apt install -y git
+> ```
+
+
+---
+
 #### 2. Build the Docker image
-```
+```bash
 docker build -t funpokedex:latest .
 ```
 
 This will:
 
 - Use Maven inside Docker to build the JAR file
-
 - Package the app into a minimal Java 21 runtime image
 
 _The first build may take a few minutes as Maven downloads dependencies._
 
-#### 3. Run the container
+---
 
-```
+#### 3. Run the container
+```bash
 docker run -d -p 8080:8080 --name funpokedex funpokedex:latest
 ```
 
 Check that it’s running:
-```
+```bash
 docker ps
 ```
 
+View logs:
+```bash
+docker logs -f funpokedex
+```
+
+---
+
 ## 🌐 Test the API
 
-Once the container is running, open your browser or use curl:
+Once the container is running, open your browser or use `curl`:
 
 #### ▶️ Get Pokémon info
-```
+```bash
 curl http://localhost:8080/pokemon/bulbasaur
 ```
 
 Example response:
-
-```
+```json
 {
   "name": "bulbasaur",
   "description": "A strange seed was planted on its back at birth.",
@@ -83,12 +106,12 @@ Example response:
 ```
 
 #### ▶️ Get translated Pokémon info
-```
+```bash
 curl http://localhost:8080/pokemon/translated/bulbasaur
 ```
 
 Example response:
-```
+```json
 {
   "name": "bulbasaur",
   "description": "A strange seed was planted on its back at birth. Speak like Yoda you will.",
@@ -99,7 +122,10 @@ Example response:
 
 If the translation API is unavailable, the app automatically falls back to the original description.
 
+---
+
 ## 🧱 Project Structure
+
 ```
 funpokedex/
 ├── src/
@@ -115,15 +141,20 @@ funpokedex/
 └── README.md                # This file
 ```
 
+---
 
 ## 🏁 Summary
 
-✅ Build and run with a single Docker command
+✅ Build and run with a single Docker command  
+✅ No dependencies required on the host machine  
+✅ REST endpoints available at `http://localhost:8080`  
+✅ Graceful fallback for failed translations  
+✅ Lightweight, reproducible, and production-ready container  
+✅ Optional fix for missing `git` dependency in container builds
 
-✅ No dependencies required on the host machine
+---
 
-✅ REST endpoints available at http://localhost:8080
+**Author:**  
+🧑‍💻 *Sara Bellatorre*  
+📧 sara.bellatorre@gmail.com  
 
-✅ Graceful fallback for failed translations
-
-✅ Lightweight, reproducible, and production-ready container
