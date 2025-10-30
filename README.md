@@ -38,7 +38,7 @@ docker --version
 
 #### 1. Clone this repository
 ```bash
-git clone https://github.com/your-username/funpokedex.git
+git clone https://github.com/mell0r1ne/FunPokeDex.git
 cd funpokedex
 ```
 
