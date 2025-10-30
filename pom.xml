@@ -3,10 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.4</version>
+        <relativePath/>
+    </parent>
 
-    <groupId>com.truelayer.intervie</groupId>
-    <artifactId>FunPokeDex</artifactId>
+    <groupId>com.truelayer.interview</groupId>
+    <artifactId>fun-pokedex</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>FunPokeDex</name>
+    <description>Pokédex application</description>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -81,8 +89,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.truelayer.interview.pokedex.PokedexApplication</mainClass>
+                    <mainClass>com.truelayer.interview.funpokedex.Main</mainClass>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
