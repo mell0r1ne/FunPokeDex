@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum PokemonHabitat {
-    CAVE("cave");
+    CAVE("cave"),
+    FOREST("forest");
     //Add other habitats for comprehensive handling.
 
 

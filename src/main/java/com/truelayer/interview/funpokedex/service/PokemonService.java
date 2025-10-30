@@ -5,10 +5,12 @@ import com.truelayer.interview.funpokedex.mapper.PokemonMapper;
 import com.truelayer.interview.funpokedex.model.dto.PokemonResponse;
 import com.truelayer.interview.funpokedex.model.client.pokemon.PokemonApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PokemonService {
 
     private final PokemonClient pokemonClient;
@@ -22,7 +24,11 @@ public class PokemonService {
 
     public PokemonResponse getTranslatedPokemonInfo(String name) {
         PokemonResponse pokemon = getPokemonInfo(name);
-        translationService.translate(pokemon);
+        try {
+            translationService.translate(pokemon);
+        } catch (Exception e) {
+            log.warn("Failed to translate {}: {}", pokemon.getName(), e.getMessage());
+        }
         return pokemon;
     }
 }
