@@ -1,4 +1,4 @@
-package com.truelayer.interview.funpokedex.config;
+package com.truelayer.interview.funpokedex.controller.openapidoc;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;

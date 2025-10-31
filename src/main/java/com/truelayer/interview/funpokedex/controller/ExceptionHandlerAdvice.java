@@ -1,4 +1,4 @@
-package com.truelayer.interview.funpokedex.config;
+package com.truelayer.interview.funpokedex.controller;
 
 import com.truelayer.interview.funpokedex.model.dto.ErrorResponse;
 import com.truelayer.interview.funpokedex.service.UtilService;
@@ -13,6 +13,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Slf4j
 @RequiredArgsConstructor
-public class SecurityExceptionHandler {
+public class ExceptionHandlerAdvice {
 
     private final UtilService utilService;
 
@@ -82,7 +84,7 @@ public class SecurityExceptionHandler {
 
         ErrorResponse errorResponse = buildErrorResponse(
                 ex.getStatusText(),
-                "An unexpected error occurred",
+                ex.getMessage(),
                 request.getDescription(false).replace("uri=", ""),
                 HttpStatus.valueOf(ex.getStatusCode().value())
         );
@@ -104,5 +106,20 @@ public class SecurityExceptionHandler {
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(
+            NoResourceFoundException ex, WebRequest request) {
+
+        log.warn("Resource not found: {}", request.getDescription(false).replace("uri=", ""));
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                "Resource Not Found",
+                "The requested resource was not found",
+                request.getDescription(false).replace("uri=", ""),
+                HttpStatus.NOT_FOUND
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 }

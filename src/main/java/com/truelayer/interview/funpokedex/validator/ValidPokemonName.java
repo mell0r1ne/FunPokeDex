@@ -1,4 +1,4 @@
-package com.truelayer.interview.funpokedex.controller.validator;
+package com.truelayer.interview.funpokedex.validator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
