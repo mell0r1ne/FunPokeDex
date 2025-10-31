@@ -1,6 +1,7 @@
 package com.truelayer.interview.funpokedex.client.pokemon;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,8 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class PokemonClientConfig {
-    private final static String baseUrl = "https://pokeapi.co/api/v2";
+    @Value("${client.api.base.url.pokemon}")
+    private String baseUrl;
 
     @Bean
     public PokemonClient pokemonClient() {
