@@ -1,21 +1,17 @@
 package com.truelayer.interview.funpokedex.controller.pokemon;
 
-import com.truelayer.interview.funpokedex.config.ApiRoutes;
+import com.truelayer.interview.funpokedex.controller.ApiRoutes;
 import com.truelayer.interview.funpokedex.model.dto.PokemonResponse;
 import com.truelayer.interview.funpokedex.service.PokemonService;
 import com.truelayer.interview.funpokedex.service.UtilService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.NotBlank;
-
 @RestController
-@RequestMapping(ApiRoutes.Pokemon.BASE_POKEMON)
+@RequestMapping(ApiRoutes.PokemonRoutes.BASE)
 @RequiredArgsConstructor
 @Slf4j
 @Validated
@@ -24,7 +20,7 @@ public class PokemonControllerImpl implements PokemonController {
     private final PokemonService pokemonService;
     private final UtilService utilService;
 
-    @GetMapping(ApiRoutes.Pokemon.GET_INFO)
+    @GetMapping(ApiRoutes.PokemonRoutes.GET_INFO)
     @Override
     public ResponseEntity<PokemonResponse> getPokemonInfo(String name) {
         
@@ -33,7 +29,7 @@ public class PokemonControllerImpl implements PokemonController {
     }
 
 
-    @GetMapping(ApiRoutes.Pokemon.GET_TRANSLATED)
+    @GetMapping(ApiRoutes.PokemonRoutes.GET_TRANSLATED)
     @Override
     public ResponseEntity<PokemonResponse> getTranslatedPokemonInfo(String name) {
         

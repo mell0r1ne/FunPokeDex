@@ -1,9 +1,9 @@
 package com.truelayer.interview.funpokedex.controller.pokemon;
 
-import com.truelayer.interview.funpokedex.config.ApiRoutes;
+import com.truelayer.interview.funpokedex.controller.ApiRoutes;
 import com.truelayer.interview.funpokedex.controller.openapidoc.CommonApiResponses;
-import com.truelayer.interview.funpokedex.controller.validator.ValidPokemonName;
 import com.truelayer.interview.funpokedex.model.dto.PokemonResponse;
+import com.truelayer.interview.funpokedex.validator.ValidPokemonName;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,7 +47,7 @@ public interface PokemonController {
             ),
     })
     @CommonApiResponses
-    @GetMapping(ApiRoutes.Pokemon.GET_INFO)
+    @GetMapping(ApiRoutes.PokemonRoutes.GET_INFO)
     ResponseEntity<PokemonResponse> getPokemonInfo(@PathVariable @ValidPokemonName String name);
 
     @Operation(
@@ -70,7 +70,7 @@ public interface PokemonController {
             )
     })
     @CommonApiResponses
-    @GetMapping(ApiRoutes.Pokemon.GET_TRANSLATED)
+    @GetMapping(ApiRoutes.PokemonRoutes.GET_TRANSLATED)
     ResponseEntity<PokemonResponse> getTranslatedPokemonInfo(
             @Parameter(description = "The name of the Pokemon", required = true, example = "bulbasaur")
             @PathVariable @ValidPokemonName String name);
