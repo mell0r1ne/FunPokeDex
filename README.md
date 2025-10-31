@@ -1,4 +1,4 @@
-# 🧩 FunPokeDex
+# FunPokeDex
 
 A simple **Spring Boot 3 + Java 21** microservice that connects to the **PokeAPI** to retrieve Pokémon information and uses the **FunTranslations API** to translate descriptions into *Yoda* or *Shakespeare* style.
 
@@ -7,18 +7,18 @@ You can build and run it **entirely with Docker**.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
-### ✅ Requirements
+### Requirements
 
 You only need **Docker** installed on your machine.
 
-#### 🪟 Windows / 🍎 macOS
+#### Windows / macOS
 
 Download and install **Docker Desktop** from:  
-👉 [https://www.docker.com/get-started](https://www.docker.com/get-started)
+[https://www.docker.com/get-started](https://www.docker.com/get-started)
 
-#### 🐧 Linux (Ubuntu example)
+#### Linux (Ubuntu example)
 
 ```bash
 sudo apt update
@@ -34,7 +34,7 @@ docker --version
 
 ---
 
-## 🛠️ Build and Run with Docker
+## Build and Run with Docker
 
 #### 1. Clone this repository
 ```bash
@@ -42,8 +42,8 @@ git clone https://github.com/mell0r1ne/FunPokeDex.git
 cd funpokedex
 ```
 
-> 💡 **Note:**  
-> If you don’t have `git` installed, install it with:
+> **Note:**  
+> If you don't have `git` installed, install it with:
 >
 > **Windows:** [Download Git for Windows](https://git-scm.com/download/win)  
 > **macOS:** Run `brew install git` (requires Homebrew)  
@@ -86,7 +86,7 @@ docker logs -f funpokedex
 
 ---
 
-## 🌐 Test the API
+## Test the API
 
 Once the container is running, open your browser or use `curl`:
 
@@ -124,7 +124,7 @@ If the translation API is unavailable, the app automatically falls back to the o
 
 ---
 
-## 🧱 Project Structure
+## Project Structure
 
 ```
 funpokedex/
@@ -143,18 +143,18 @@ funpokedex/
 
 ---
 
-## 🏁 Summary
+## Summary
 
-✅ Build and run with a single Docker command  
-✅ No dependencies required on the host machine  
-✅ REST endpoints available at `http://localhost:8080`  
-✅ Graceful fallback for failed translations  
-✅ Lightweight, reproducible, and production-ready container  
-✅ Optional fix for missing `git` dependency in container builds
+- Build and run with a single Docker command  
+- No dependencies required on the host machine  
+- REST endpoints available at `http://localhost:8080`  
+- Graceful fallback for failed translations  
+- Lightweight, reproducible, and production-ready container  
+- Optional fix for missing `git` dependency in container builds
 
 ---
 
 **Author:**  
-🧑‍💻 *Sara Bellatorre*  
-📧 sara.bellatorre@gmail.com  
+*Sara Bellatorre*  
+sara.bellatorre@gmail.com  
 
