@@ -21,8 +21,8 @@ public class UtilService {
             return "null";
         }
         // Remove potential log injection characters
-        return input.replaceAll("[\r\n\t]", "_")
-                   .replaceAll("\\p{Cntrl}", "")
-                   .substring(0, Math.min(input.length(), 100)); // Limit length
+        String sanitized = input.replaceAll("[\r\n\t]", "_")
+                                .replaceAll("\\p{Cntrl}", "");
+        return sanitized.substring(0, Math.min(sanitized.length(), 100)); // Limit length
     }
 }
