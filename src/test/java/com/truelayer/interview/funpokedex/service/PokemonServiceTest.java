@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 /**
@@ -81,58 +82,47 @@ class PokemonServiceTest {
     }
 
     @Test
-    void shouldReturnNull_WhenNameIsNull() {
-        // when
-        PokemonResponse result = pokemonService.getPokemonInfo(null);
-        // then
-        assertThat(result).isNull();
-        verifyNoInteractions(pokemonClient, pokemonMapper, translationService);
-    }
-
-    @Test
-    void shouldReturnNull_WhenNameIsBlank() {
-        // when
-        PokemonResponse result = pokemonService.getPokemonInfo("   ");
-        // then
-        assertThat(result).isNull();
-        verifyNoInteractions(pokemonClient, pokemonMapper, translationService);
-    }
-
-    @Test
-    void shouldReturnNull_WhenApiResponseIsNull() {
+    void shouldThrowPokemonNotFoundException_WhenApiResponseIsNull() {
         // given
         when(pokemonClient.getPokemonByName("missingno")).thenReturn(null);
-        // when
-        PokemonResponse result = pokemonService.getPokemonInfo("missingno");
-        // then
-        assertThat(result).isNull();
+        // when & then
+        try {
+            pokemonService.getPokemonInfo("missingno");
+            fail("Expected PokemonNotFoundException");
+        } catch (com.truelayer.interview.funpokedex.exception.PokemonNotFoundException e) {
+            assertThat(e.getMessage()).contains("missingno");
+        }
         verify(pokemonClient).getPokemonByName("missingno");
         verifyNoInteractions(pokemonMapper, translationService);
     }
 
     @Test
-    void shouldReturnNull_WhenExceptionIsThrown() {
+    void shouldThrowExternalApiException_WhenExceptionIsThrown() {
         // given
         when(pokemonClient.getPokemonByName("error")).thenThrow(new RuntimeException("API error"));
-        // when
-        PokemonResponse result = pokemonService.getPokemonInfo("error");
-        // then
-        assertThat(result).isNull();
+        // when & then
+        try {
+            pokemonService.getPokemonInfo("error");
+            fail("Expected ExternalApiException");
+        } catch (com.truelayer.interview.funpokedex.exception.ExternalApiException e) {
+            assertThat(e.getMessage()).contains("Failed to retrieve Pokemon information");
+        }
         verify(pokemonClient).getPokemonByName("error");
         verifyNoInteractions(pokemonMapper, translationService);
     }
 
     @Test
-    void shouldReturnNull_WhenGetPokemonInfoReturnsNullInTranslation() {
+    void shouldThrowPokemonNotFoundException_WhenGetPokemonInfoFailsInTranslation() {
         // given
-        // Simulate getPokemonInfo returns null
-        PokemonService spyService = spy(pokemonService);
-        doReturn(null).when(spyService).getPokemonInfo("ghost");
-        // when
-        PokemonResponse result = spyService.getTranslatedPokemonInfo("ghost");
-        // then
-        assertThat(result).isNull();
-        verify(spyService).getPokemonInfo("ghost");
+        when(pokemonClient.getPokemonByName("ghost")).thenReturn(null);
+        // when & then
+        try {
+            pokemonService.getTranslatedPokemonInfo("ghost");
+            fail("Expected PokemonNotFoundException");
+        } catch (com.truelayer.interview.funpokedex.exception.PokemonNotFoundException e) {
+            assertThat(e.getMessage()).contains("ghost");
+        }
+        verify(pokemonClient).getPokemonByName("ghost");
         verifyNoInteractions(translationService);
     }
 

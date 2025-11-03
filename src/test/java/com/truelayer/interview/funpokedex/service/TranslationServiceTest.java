@@ -8,10 +8,10 @@ import com.truelayer.interview.funpokedex.model.enums.PokemonHabitat;
 import com.truelayer.interview.funpokedex.model.enums.TranslatorType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -26,6 +26,9 @@ class TranslationServiceTest {
     @Mock
     private TranslationClient translationClient;
 
+    @Mock
+    private UtilService utilService;
+
     @InjectMocks
     private TranslationService translationService;
 
@@ -36,6 +39,9 @@ class TranslationServiceTest {
         pokemon = new PokemonResponse();
         pokemon.setName("mewtwo");
         pokemon.setDescription("A powerful psychic pokemon.");
+
+        // Mock sanitizeForLogging to return the input as-is (lenient because not all tests use it)
+        lenient().when(utilService.sanitizeForLogging(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
     }
 
     @Test

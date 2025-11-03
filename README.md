@@ -131,19 +131,41 @@ curl http://localhost:8080/v3/api-docs.yaml  # YAML format
 ## Project Structure
 
 ```
-funpokedex/
+FunPokeDex/
 ├── src/
 │   ├── main/java/com/truelayer/interview/funpokedex/
-│   │   ├── controller/      # REST controllers
-│   │   ├── service/         # Business logic
-│   │   ├── client/          # HTTP clients
-│   │   ├── mapper/          # API-to-domain mapper
-│   │   └── model/           # DTOs, Enums, API response models
-│   └── test/java/           # Unit tests (JUnit + Mockito)
-├── pom.xml                  # Maven build
-├── Dockerfile               # Multi-stage Docker build
-├── Makefile                 # Docker and dev helpers
-└── README.md                # This file
+│   │   ├── controller/              # REST API endpoints
+│   │   ├── service/                 # Business logic layer
+│   │   ├── client/                  # HTTP clients for external APIs
+│   │   ├── mapper/                  # API response to domain mapping
+│   │   ├── model/                   # DTOs, enums, and API models
+│   │   ├── validator/               # Input validation
+│   │   └── Main.java
+│   ├── resources/
+│   │   ├── application.properties
+│   │   └── application-prod.properties
+│   └── test                         # Unit tests 
+├── target/                          # Build output
+├── pom.xml
+├── Dockerfile
+├── Makefile
+└── README.md
+```
+
+### Architecture
+
+```
+HTTP Request
+    ↓
+Controller (REST endpoints)
+    ↓
+Service (Business logic)
+    ↓
+Client (HTTP calls to external APIs)
+    ↓
+Mapper (Transform responses to DTOs)
+    ↓
+HTTP Response
 ```
 
 ---
