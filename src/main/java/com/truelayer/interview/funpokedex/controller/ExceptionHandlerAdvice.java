@@ -6,15 +6,20 @@ import com.truelayer.interview.funpokedex.model.dto.ErrorResponse;
 import com.truelayer.interview.funpokedex.service.UtilService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
@@ -27,7 +32,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 @Slf4j
 @RequiredArgsConstructor
-public class ExceptionHandlerAdvice {
+public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 
     private final UtilService utilService;
 
@@ -94,6 +99,46 @@ public class ExceptionHandlerAdvice {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+        log.warn("Method argument validation failed: {}", ex.getMessage());
+
+        String errors = ex.getBindingResult().getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                "Validation failed: " + errors,
+                request.getDescription(false).replace("uri=", ""),
+                HttpStatus.BAD_REQUEST
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(
+            MethodArgumentTypeMismatchException ex, WebRequest request) {
+
+        log.warn("Method argument type mismatch: {}", ex.getMessage());
+
+        String message = String.format("Invalid value '%s' for parameter '%s'",
+                ex.getValue(), ex.getName());
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                message,
+                request.getDescription(false).replace("uri=", ""),
+                HttpStatus.BAD_REQUEST
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
             IllegalArgumentException ex, WebRequest request) {
@@ -124,6 +169,22 @@ public class ExceptionHandlerAdvice {
         );
 
         return new ResponseEntity<>(errorResponse, ex.getStatusCode());
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(
+            Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+
+        log.warn("Spring MVC exception: {}", ex.getMessage());
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.valueOf(statusCode.value()).getReasonPhrase(),
+                ex.getMessage() != null ? ex.getMessage() : "Bad request",
+                request.getDescription(false).replace("uri=", ""),
+                HttpStatus.valueOf(statusCode.value())
+        );
+
+        return new ResponseEntity<>(errorResponse, statusCode);
     }
 
     @ExceptionHandler(Exception.class)
