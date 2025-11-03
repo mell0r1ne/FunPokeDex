@@ -18,6 +18,7 @@ import java.util.Optional;
 public class TranslationService {
 
     private final TranslationClient translationClient;
+    private final UtilService utilService;
 
     /**
      * Translates the Pokémon description using the appropriate translator.
@@ -64,22 +65,12 @@ public class TranslationService {
                 log.debug("Successfully translated text with {} translator", translator.getAuthorName());
                 return Optional.of(response.getContents().getTranslated());
             } else {
-                log.warn("Translation API returned null or incomplete response for translator {}. Returning original text. Text: {}", translator.getAuthorName(), sanitizeForLog(text));
+                log.warn("Translation API returned null or incomplete response for translator {}. Returning original text. Text: {}", translator.getAuthorName(), utilService.sanitizeForLogging(text));
             }
         } catch (Exception e) {
-            log.warn("Translation API failed for {}. Returning original text. Text: {}. Error: {}", translator.getAuthorName(), sanitizeForLog(text), e.getMessage());
+            log.warn("Translation API failed for {}. Returning original text. Text: {}. Error: {}", translator.getAuthorName(), utilService.sanitizeForLogging(text), e.getMessage());
         }
         return Optional.of(text);
     }
 
-    /**
-     * Sanitizes text for safe logging (truncates and removes control characters).
-     * @param input the input string
-     * @return sanitized string
-     */
-    private String sanitizeForLog(String input) {
-        if (input == null) return "null";
-        String sanitized = input.replaceAll("[\r\n\t]", "_").replaceAll("\\p{Cntrl}", "");
-        return sanitized.substring(0, Math.min(sanitized.length(), 100));
-    }
 }
