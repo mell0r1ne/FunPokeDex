@@ -25,4 +25,6 @@ public class UtilService {
                                 .replaceAll("\\p{Cntrl}", "");
         return sanitized.substring(0, Math.min(sanitized.length(), 100)); // Limit length
     }
+
+    // POSSIBLE IMPROVEMENT: centralize logging management and add more detailed logs for REST API calls
 }
