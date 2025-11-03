@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 class PokemonControllerImplTest {
@@ -29,11 +30,15 @@ class PokemonControllerImplTest {
     }
 
     @Test
-    void shouldReturnNotFound_WhenPokemonNotFound() {
+    void shouldThrowPokemonNotFoundException_WhenPokemonNotFound() {
         when(pokemonService.getPokemonInfo("pikachu"))
                 .thenThrow(new com.truelayer.interview.funpokedex.exception.PokemonNotFoundException("Pokemon 'pikachu' not found"));
-        ResponseEntity<PokemonResponse> response = controller.getPokemonInfo("pikachu");
-        assertThat(response.getStatusCode().value()).isEqualTo(404);
+        try {
+            controller.getPokemonInfo("pikachu");
+            fail("Expected PokemonNotFoundException");
+        } catch (com.truelayer.interview.funpokedex.exception.PokemonNotFoundException e) {
+            assertThat(e.getMessage()).contains("pikachu");
+        }
     }
 
     @Test
@@ -46,19 +51,27 @@ class PokemonControllerImplTest {
     }
 
     @Test
-    void shouldReturnServiceUnavailable_WhenExternalApiException() {
+    void shouldThrowExternalApiException_WhenApiError() {
         when(pokemonService.getPokemonInfo("pikachu"))
                 .thenThrow(new com.truelayer.interview.funpokedex.exception.ExternalApiException("API error"));
-        ResponseEntity<PokemonResponse> response = controller.getPokemonInfo("pikachu");
-        assertThat(response.getStatusCode().value()).isEqualTo(503);
+        try {
+            controller.getPokemonInfo("pikachu");
+            fail("Expected ExternalApiException");
+        } catch (com.truelayer.interview.funpokedex.exception.ExternalApiException e) {
+            assertThat(e.getMessage()).contains("API error");
+        }
     }
 
     @Test
-    void shouldReturnNotFound_WhenTranslatedPokemonNotFound() {
+    void shouldThrowPokemonNotFoundException_WhenTranslatedPokemonNotFound() {
         when(pokemonService.getTranslatedPokemonInfo("pikachu"))
                 .thenThrow(new com.truelayer.interview.funpokedex.exception.PokemonNotFoundException("Pokemon 'pikachu' not found"));
-        ResponseEntity<PokemonResponse> response = controller.getTranslatedPokemonInfo("pikachu");
-        assertThat(response.getStatusCode().value()).isEqualTo(404);
+        try {
+            controller.getTranslatedPokemonInfo("pikachu");
+            fail("Expected PokemonNotFoundException");
+        } catch (com.truelayer.interview.funpokedex.exception.PokemonNotFoundException e) {
+            assertThat(e.getMessage()).contains("pikachu");
+        }
     }
 
     @Test
@@ -72,10 +85,14 @@ class PokemonControllerImplTest {
 
 
     @Test
-    void shouldReturnServiceUnavailable_WhenTranslatedExternalApiException() {
+    void shouldThrowExternalApiException_WhenTranslatedApiError() {
         when(pokemonService.getTranslatedPokemonInfo("mewtwo"))
                 .thenThrow(new com.truelayer.interview.funpokedex.exception.ExternalApiException("API error"));
-        ResponseEntity<PokemonResponse> response = controller.getTranslatedPokemonInfo("mewtwo");
-        assertThat(response.getStatusCode().value()).isEqualTo(503);
+        try {
+            controller.getTranslatedPokemonInfo("mewtwo");
+            fail("Expected ExternalApiException");
+        } catch (com.truelayer.interview.funpokedex.exception.ExternalApiException e) {
+            assertThat(e.getMessage()).contains("API error");
+        }
     }
 }
