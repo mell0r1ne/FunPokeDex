@@ -132,6 +132,35 @@ class TranslationServiceTest {
         assertThat(pokemon.getDescription()).isEqualTo("A powerful psychic pokemon.");
     }
 
+    @Test
+    void shouldNotCallTranslation_WhenPokemonIsNull() {
+        // when
+        translationService.translate(null);
+        // then
+        verifyNoInteractions(translationClient);
+    }
+
+    @Test
+    void shouldNotCallTranslation_WhenDescriptionIsNull() {
+        // given
+        pokemon.setDescription(null);
+        // when
+        translationService.translate(pokemon);
+        // then
+        verifyNoInteractions(translationClient);
+    }
+
+    @Test
+    void shouldNotCallTranslation_WhenDescriptionIsBlank() {
+        // given
+        pokemon.setDescription("   ");
+        // when
+        translationService.translate(pokemon);
+        // then
+        verifyNoInteractions(translationClient);
+    }
+
+
     // --- helper ---
     private TranslationApiResponse successResponse(String translatedText) {
         return TranslationApiResponse.builder()
