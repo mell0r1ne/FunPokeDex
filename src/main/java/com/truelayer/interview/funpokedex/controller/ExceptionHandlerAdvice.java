@@ -1,5 +1,7 @@
 package com.truelayer.interview.funpokedex.controller;
 
+import com.truelayer.interview.funpokedex.exception.ExternalApiException;
+import com.truelayer.interview.funpokedex.exception.PokemonNotFoundException;
 import com.truelayer.interview.funpokedex.model.dto.ErrorResponse;
 import com.truelayer.interview.funpokedex.service.UtilService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,38 @@ public class ExceptionHandlerAdvice {
                 .status(String.valueOf(status.value()))
                 .path(path)
                 .build();
+    }
+
+    @ExceptionHandler(PokemonNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePokemonNotFoundException(
+            PokemonNotFoundException ex, WebRequest request) {
+
+        log.debug("Pokemon not found: {}", ex.getMessage());
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""),
+                HttpStatus.NOT_FOUND
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ExternalApiException.class)
+    public ResponseEntity<ErrorResponse> handleExternalApiException(
+            ExternalApiException ex, WebRequest request) {
+
+        log.error("External API error: {}", utilService.sanitizeForLogging(ex.getMessage()), ex);
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase(),
+                "Service temporarily unavailable. Please try again later.",
+                request.getDescription(false).replace("uri=", ""),
+                HttpStatus.SERVICE_UNAVAILABLE
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
