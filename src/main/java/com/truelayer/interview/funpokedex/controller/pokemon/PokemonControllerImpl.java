@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class PokemonControllerImpl implements PokemonController {
 
     private final PokemonService pokemonService;
-    private final UtilService utilService;
 
     /**
      * Returns basic Pokémon information by name.
