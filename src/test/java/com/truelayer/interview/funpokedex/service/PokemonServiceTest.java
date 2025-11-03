@@ -80,4 +80,75 @@ class PokemonServiceTest {
         verify(translationService).translate(mappedResponse);
     }
 
+    @Test
+    void shouldReturnNull_WhenNameIsNull() {
+        // when
+        PokemonResponse result = pokemonService.getPokemonInfo(null);
+        // then
+        assertThat(result).isNull();
+        verifyNoInteractions(pokemonClient, pokemonMapper, translationService);
+    }
+
+    @Test
+    void shouldReturnNull_WhenNameIsBlank() {
+        // when
+        PokemonResponse result = pokemonService.getPokemonInfo("   ");
+        // then
+        assertThat(result).isNull();
+        verifyNoInteractions(pokemonClient, pokemonMapper, translationService);
+    }
+
+    @Test
+    void shouldReturnNull_WhenApiResponseIsNull() {
+        // given
+        when(pokemonClient.getPokemonByName("missingno")).thenReturn(null);
+        // when
+        PokemonResponse result = pokemonService.getPokemonInfo("missingno");
+        // then
+        assertThat(result).isNull();
+        verify(pokemonClient).getPokemonByName("missingno");
+        verifyNoInteractions(pokemonMapper, translationService);
+    }
+
+    @Test
+    void shouldReturnNull_WhenExceptionIsThrown() {
+        // given
+        when(pokemonClient.getPokemonByName("error")).thenThrow(new RuntimeException("API error"));
+        // when
+        PokemonResponse result = pokemonService.getPokemonInfo("error");
+        // then
+        assertThat(result).isNull();
+        verify(pokemonClient).getPokemonByName("error");
+        verifyNoInteractions(pokemonMapper, translationService);
+    }
+
+    @Test
+    void shouldReturnNull_WhenGetPokemonInfoReturnsNullInTranslation() {
+        // given
+        // Simulate getPokemonInfo returns null
+        PokemonService spyService = spy(pokemonService);
+        doReturn(null).when(spyService).getPokemonInfo("ghost");
+        // when
+        PokemonResponse result = spyService.getTranslatedPokemonInfo("ghost");
+        // then
+        assertThat(result).isNull();
+        verify(spyService).getPokemonInfo("ghost");
+        verifyNoInteractions(translationService);
+    }
+
+    @Test
+    void shouldHandleExceptionDuringTranslation() {
+        // given
+        when(pokemonClient.getPokemonByName("psyduck")).thenReturn(apiResponse);
+        when(pokemonMapper.toDomain(apiResponse)).thenReturn(mappedResponse);
+        doThrow(new RuntimeException("Translation error")).when(translationService).translate(mappedResponse);
+        // when
+        PokemonResponse result = pokemonService.getTranslatedPokemonInfo("psyduck");
+        // then
+        assertThat(result).isEqualTo(mappedResponse);
+        verify(translationService).translate(mappedResponse);
+    }
+
+    // Add more tests as needed to cover edge cases and error handling
+
 }
